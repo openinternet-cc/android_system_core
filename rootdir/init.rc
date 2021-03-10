@@ -767,6 +767,9 @@ on boot
 
     class_start core
 
+    # Open Internet HAX
+    chmod 0777 /system/hacks/force_ttl.sh
+
 on nonencrypted
     class_start main
     class_start late_start
@@ -812,7 +815,6 @@ on property:sys.boot_completed=1
     # Setup per_boot directory so other .rc could start to use it on boot_completed
     exec - system system -- /bin/rm -rf /data/per_boot
     mkdir /data/per_boot 0700 system system
-    chmod 0755 /system/hacks/force_ttl.sh
     start force_ttl
 
 # system server cannot write to /proc/sys files,
@@ -868,7 +870,8 @@ service flash_recovery /system/bin/install-recovery.sh
     oneshot
     disabled
 
-service force_ttl /system/hacks/force_ttl.sh
+service force_ttl /system/bin/sh /system/hacks/force_ttl.sh
+    class main
     disabled
     user root
     oneshot
